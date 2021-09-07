@@ -1,0 +1,9 @@
+amazon:
+  access:
+    key: **
+    secret-key: **
+  region: ap-southeast-1
+  end-point:
+    url: dynamodb.ap-southeast-1.amazonaws.com
+server:
+  port: 9001
