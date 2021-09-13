@@ -37,7 +37,7 @@ public class BlogsRepository  {
         dynamoDBMapper.save(blogsEntity);
     }
 
-    public void deleteBlogById(BlogsEntity blogsEntity) {
+    public void deleteBlog(BlogsEntity blogsEntity) {
         dynamoDBMapper.delete(blogsEntity);
     }
 }

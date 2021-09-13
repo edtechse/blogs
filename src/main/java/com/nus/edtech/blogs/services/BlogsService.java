@@ -18,7 +18,7 @@ public class BlogsService {
          blogsRepository.saveBlog(blogsEntity);
     }
 
-    public List<String> findQuestionIdByAuthor(String author) {
+    public List<String> findBlogsByAuthor(String author) {
         List<BlogsEntity> items = blogsRepository.findBlogsByAuthor(author);
         List<String> idList = new ArrayList<>();
         for(BlogsEntity item: items) {
@@ -44,6 +44,13 @@ public class BlogsService {
 
     public void deleteBlogById(String id) {
         BlogsEntity blogsEntity = blogsRepository.findBlogById(id);
-        blogsRepository.deleteBlogById(blogsEntity);
+        blogsRepository.deleteBlog(blogsEntity);
+    }
+
+    public void deleteBlogsByAuthor(String author) {
+        List <BlogsEntity> blogsByAuthor = blogsRepository.findBlogsByAuthor(author);
+        for (BlogsEntity blogEntity:blogsByAuthor) {
+            blogsRepository.deleteBlog(blogEntity);
+        }
     }
 }
