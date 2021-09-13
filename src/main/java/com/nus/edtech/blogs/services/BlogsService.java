@@ -1,6 +1,7 @@
 package com.nus.edtech.blogs.services;
 
 import com.nus.edtech.blogs.dao.BlogsEntity;
+import com.nus.edtech.blogs.dao.ComplexBlogs;
 import com.nus.edtech.blogs.repositories.BlogsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,5 +53,18 @@ public class BlogsService {
         for (BlogsEntity blogEntity:blogsByAuthor) {
             blogsRepository.deleteBlog(blogEntity);
         }
+    }
+
+    public List<ComplexBlogs> findComplexBlogsByAuthorAndId(String author, String blogId) {
+        List<ComplexBlogs> items = blogsRepository.findComplexBlogsByAuthorAndId(author, blogId);
+        return items;
+    }
+
+    public void postComplexBlogByAuthor(ComplexBlogs requestBlog) {
+        blogsRepository.saveComplexBlog(requestBlog);
+    }
+
+    public List<ComplexBlogs> findComplexBlogsByAuthor(String author) {
+        return blogsRepository.findComplexBlogsByAuthor(author);
     }
 }

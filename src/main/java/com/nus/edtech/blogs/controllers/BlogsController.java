@@ -2,6 +2,7 @@ package com.nus.edtech.blogs.controllers;
 
 import com.nus.edtech.blogs.common.utils.BlogsValidator;
 import com.nus.edtech.blogs.dao.BlogsEntity;
+import com.nus.edtech.blogs.dao.ComplexBlogs;
 import com.nus.edtech.blogs.models.Blogs;
 import com.nus.edtech.blogs.services.BlogsService;
 import ma.glasnost.orika.MapperFacade;
@@ -82,6 +83,31 @@ public class BlogsController {
             return true;
         } catch (Exception ex) {
             throw new Exception("deleteBlogById:: Failed to delete blog due to " + ex.getMessage());
+        }
+    }
+
+    @GetMapping("complex/{author}/{blogId}")
+    public List<ComplexBlogs> getComplexBlogByAuthorAndId(@PathVariable(value = "author") String author, @PathVariable(value = "blogId") String blogId) {
+        return blogsService.findComplexBlogsByAuthorAndId(author, blogId);
+    }
+
+    @GetMapping("complex/author/{author}")
+    public List<ComplexBlogs> getComplexBlogByAuthor(@PathVariable(value = "author") String author) {
+        return blogsService.findComplexBlogsByAuthor(author);
+    }
+
+    @PostMapping("complex/{author}")
+    public boolean postComplexBlogByAuthor(@PathVariable (value = "author") String author, @RequestBody ComplexBlogs requestBlog) throws Exception {
+        if(requestBlog == null || author == null) {
+            throw new Exception("Input blog or author is null");
+        }
+        try{
+            requestBlog.setAuthor(author);
+            blogsService.postComplexBlogByAuthor(requestBlog);
+            return true;
+
+        }catch (Exception ex){
+            throw ex;
         }
     }
 }
