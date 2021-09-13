@@ -1,20 +1,43 @@
 package com.nus.edtech.blogs.repositories;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.nus.edtech.blogs.dao.BlogsEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Repository
 public class BlogsRepository  {
 
     @Autowired
-    private DynamoDBMapper dynamoDBmapper;
+    private DynamoDBMapper dynamoDBMapper;
 
-    public BlogsEntity findBlogById(int blogId) {
-        return dynamoDBMapper.load(BlogsEntity.class, 1, "Garfield");
+    public BlogsEntity findBlogById(String id) {
+        return dynamoDBMapper.load(BlogsEntity.class, id);
     }
 
-    public BlogsEntity save(BlogsEntity blogsEntity){
-        return new BlogsEntity();
+    public List<BlogsEntity> findBlogsByAuthor(String author) {
+        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+        eav.put(":val", new AttributeValue().withS(author));
+
+        DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
+                .withFilterExpression("author = :val").withExpressionAttributeValues(eav);
+
+        List<BlogsEntity> scanResult = dynamoDBMapper.scan(BlogsEntity.class, scanExpression);
+
+        return scanResult;
+    }
+
+    public void saveBlog(BlogsEntity blogsEntity){
+        dynamoDBMapper.save(blogsEntity);
+    }
+
+    public void deleteBlogById(BlogsEntity blogsEntity) {
+        dynamoDBMapper.delete(blogsEntity);
     }
 }
