@@ -67,4 +67,8 @@ public class BlogsService {
     public List<ComplexBlogs> findComplexBlogsByAuthor(String author) {
         return blogsRepository.findComplexBlogsByAuthor(author);
     }
+
+    public void queryIndex(String author) {
+         blogsRepository.queryIndex(author);
+    }
 }

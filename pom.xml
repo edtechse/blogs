@@ -65,6 +65,11 @@
 			<artifactId>aws-java-sdk-dynamodb</artifactId>
 			<version>1.11.408</version>
 		</dependency>
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>amazon-dax-client</artifactId>
+			<version>1.0.230341.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>

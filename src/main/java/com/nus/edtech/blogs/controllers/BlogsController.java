@@ -110,4 +110,10 @@ public class BlogsController {
             throw ex;
         }
     }
+
+    //query index
+    @GetMapping("index/author/{author}")
+    public void queryIndex(@PathVariable(value = "author") String author) {
+         blogsService.queryIndex(author);
+    }
 }
