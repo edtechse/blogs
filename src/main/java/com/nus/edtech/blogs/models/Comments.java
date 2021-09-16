@@ -1,7 +1,8 @@
 package com.nus.edtech.blogs.models;
 
-public class Comment {
+public class Comments {
 
+    private String commentId;
     private String commentText;
     private String commentAuthor;
     private String commentCreationDate;
@@ -28,5 +29,13 @@ public class Comment {
 
     public void setCommentCreationDate(String commentCreationDate) {
         this.commentCreationDate = commentCreationDate;
+    }
+
+    public String getCommentId() {
+        return commentId;
+    }
+
+    public void setCommentId(String commentId) {
+        this.commentId = commentId;
     }
 }

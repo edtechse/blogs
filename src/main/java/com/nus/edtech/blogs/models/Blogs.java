@@ -1,7 +1,5 @@
 package com.nus.edtech.blogs.models;
 
-import com.nus.edtech.blogs.dao.BlogsEntity;
-
 import java.util.List;
 import java.util.Set;
 
@@ -15,9 +13,10 @@ public class Blogs {
         private String likesCount;
         private String rating;
         private boolean reportSpam;
-        private List<BlogsEntity.Comments> comments;
-        private Set<String> interactionIds;
-
+        private List<Comments> comments;
+        private Set<String> likeInteractionIds;
+        private Set<String> reportSpamInteractionIds;
+        private Set<String> ratingInteractionIds;
 
         public String getId() { return id;}
         public void setId(String id) {this.id = id;}
@@ -46,11 +45,18 @@ public class Blogs {
         public boolean isReportSpam() { return reportSpam; }
         public void setReportSpam(boolean reportSpam) { this.reportSpam = reportSpam; }
 
-        public List<BlogsEntity.Comments> getComments() { return comments; }
-        public void setComments(List<BlogsEntity.Comments> comments) { this.comments = comments; }
+        public List<Comments> getComments() { return comments; }
+        public void setComments(List<Comments> comments) { this.comments = comments; }
 
-        public Set<String> getInteractionIds() { return interactionIds; }
-        public void setInteractionIds(Set<String> interactionIds) { this.interactionIds = interactionIds; }
+        public Set<String> getLikeInteractionIds() { return likeInteractionIds; }
+        public void setLikeInteractionIds(Set<String> likeInteractionIds) { this.likeInteractionIds = likeInteractionIds; }
+
+        public Set<String> getReportSpamInteractionIds() { return reportSpamInteractionIds; }
+        public void setReportSpamInteractionIds(Set<String> reportSpamInteractionIds) {
+                this.reportSpamInteractionIds = reportSpamInteractionIds; }
+
+        public Set<String> getRatingInteractionIds() { return ratingInteractionIds; }
+        public void setRatingInteractionIds(Set<String> ratingInteractionIds) { this.ratingInteractionIds = ratingInteractionIds; }
 
         @Override
         public String toString() {

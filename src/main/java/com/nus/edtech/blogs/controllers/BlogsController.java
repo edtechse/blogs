@@ -1,6 +1,9 @@
 package com.nus.edtech.blogs.controllers;
 
 import com.nus.edtech.blogs.dao.BlogsEntity;
+import com.nus.edtech.blogs.models.Blogs;
+import com.nus.edtech.blogs.models.Comments;
+import com.nus.edtech.blogs.models.Interaction;
 import com.nus.edtech.blogs.services.BlogsService;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,63 +23,56 @@ public class BlogsController {
     private MapperFacade mapperFacade;
 
     @PostMapping("author/{author}")
-    public boolean postBlogByAuthor(@PathVariable (value = "author") String author, @RequestBody BlogsEntity requestBlogsEntity) throws Exception {
-        if(requestBlogsEntity == null || author == null) {
+    public boolean postBlogByAuthor(@PathVariable(value = "author") String author, @RequestBody Blogs requestBlog) throws Exception {
+        if (requestBlog == null || author == null)
             throw new Exception("Input blog or author is null");
-        }
-        try{
-            requestBlogsEntity.setBlogAuthor(author);
-           // BlogsEntity requestBlogsEntity = mapperFacade.map(requestBlog, BlogsEntity.class);
+        try {
+            requestBlog.setBlogAuthor(author);
+            BlogsEntity requestBlogsEntity = mapperFacade.map(requestBlog, BlogsEntity.class);
             blogsService.postBlogByAuthor(requestBlogsEntity);
             return true;
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             throw ex;
         }
     }
 
     @GetMapping("author/{author}")
-    public List<String> getBlogIdsByAuthor(@PathVariable(value = "author") String author) {
+    public List<String> getBlogIdsByAuthor(@PathVariable(value = "author") String author) throws Exception {
+        if (author == null)
+            throw new Exception("Input author is null");
         return blogsService.findBlogsByAuthor(author);
     }
 
     @DeleteMapping("author/{author}")
-    public boolean deleteBlogsByAuthor(@PathVariable (value = "author") String author){
+    public boolean deleteBlogsByAuthor(@PathVariable(value = "author") String author) throws Exception {
+        if (author == null)
+            throw new Exception("Input author is null");
         try {
             blogsService.deleteBlogsByAuthor(author);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             throw ex;
         }
         return true;
     }
+
     @GetMapping("/blog/{id}")
-    public BlogsEntity getBlogById(@PathVariable (value = "id") String id){
+    public BlogsEntity getBlogById(@PathVariable(value = "id") String id) throws Exception {
+        if (id == null)
+            throw new Exception("Input blogId is null");
         return blogsService.getBlogById(id);
     }
 
-    //modify
     @PutMapping("blog/{id}")
-    public boolean updateBlogById(@PathVariable(value = "id") String id, @RequestBody BlogsEntity requestBlogsEntity) throws Exception {
+    public boolean updateBlogById(@PathVariable(value = "id") String id, @RequestBody Blogs requestBlog) throws Exception {
         try {
-            if(id == null)
+            if (id == null)
                 throw new Exception("Empty id sent for updateBlog");
-            requestBlogsEntity.setId(id);
+            requestBlog.setId(id);
+            BlogsEntity requestBlogsEntity = mapperFacade.map(requestBlog, BlogsEntity.class);
             blogsService.updateBlog(requestBlogsEntity);
             return true;
-        }catch (Exception ex){
-            throw ex;
-        }
-    }
-
-    @PutMapping("blog/{blogid}/comment")
-    public boolean addCommentToBlog(@PathVariable(value = "blogid") String blogId, @RequestBody BlogsEntity.Comments comment)
-            throws Exception {
-        try{
-                if(blogId == null || comment == null)
-                    throw new Exception("Empty blogId or comment sent for addCommentToBlog");
-                blogsService.addCommentToBlog(blogId,comment);
-                return true;
-        }catch (Exception ex){
+        } catch (Exception ex) {
             throw ex;
         }
     }
@@ -84,7 +80,7 @@ public class BlogsController {
     @DeleteMapping("blog/{id}")
     public boolean deleteBlogById(@PathVariable(value = "id") String id) throws Exception {
         try {
-            if(id == null)
+            if (id == null)
                 throw new Exception("Empty id sent for delete");
             blogsService.deleteBlogById(id);
             return true;
@@ -93,10 +89,43 @@ public class BlogsController {
         }
     }
 
+    @PutMapping("blog/{blogid}/comment")
+    public boolean addCommentToBlog(@PathVariable(value = "blogid") String blogId, @RequestBody Comments comments)
+            throws Exception {
+        try {
+            if (blogId == null || comments == null)
+                throw new Exception("Empty blogId or comment sent for addCommentToBlog");
+            BlogsEntity.Comments commentsEntity = mapperFacade.map(comments, BlogsEntity.Comments.class);
+            blogsService.addCommentToBlog(blogId, commentsEntity);
+            return true;
+        } catch (Exception ex) {
+            throw ex;
+        }
+    }
 
-    //query index
-    @GetMapping("index/author/{author}")
-    public void queryIndex(@PathVariable(value = "author") String author) {
-         blogsService.queryIndex(author);
+    @DeleteMapping("blog/{blogid}/comment/{commentid}")
+    public boolean deleteCommentById(@PathVariable(value = "blogid") String blogId,
+                                     @PathVariable(value = "commentid") String commentId) throws Exception {
+        try {
+            if(blogId == null || commentId == null)
+                throw new Exception("Input BlogId or CommentId is null for deleteCommentById");
+            blogsService.deleteCommentById(blogId,commentId);
+            return true;
+        } catch(Exception ex){
+        throw ex;
+        }
+    }
+
+    @PutMapping("blog/{blogid}/interaction")
+    public boolean updateInteractionToBlog(@PathVariable(value = "blogid") String blogId,
+                                           @RequestBody Interaction interaction) throws Exception {
+        try {
+            if(blogId == null || interaction == null)
+                throw new Exception("Input blogId or interaction is null for updateInteractionToBlog");
+            blogsService.updateInteractionToBlog(blogId,interaction);
+            return true;
+        }catch (Exception ex){
+            throw ex;
+        }
     }
 }

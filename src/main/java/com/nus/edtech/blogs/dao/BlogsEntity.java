@@ -1,7 +1,6 @@
 package com.nus.edtech.blogs.dao;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
-
 import java.util.List;
 import java.util.Set;
 
@@ -14,8 +13,8 @@ public class BlogsEntity {
     private String blogCreationDate;
     private String blogText;
     private Set<String> blogTags;
-    private String likesCount;
-    private String rating;
+    private int likesCount;
+    private int rating;
     private boolean reportSpam;
     private List<Comments> comments;
     private Set<String> likeInteractionIds;
@@ -48,12 +47,12 @@ public class BlogsEntity {
     public void setBlogTags(Set<String> blogTags) { this.blogTags = blogTags; }
 
     @DynamoDBAttribute(attributeName = "likescount")
-    public String getLikesCount() { return likesCount; }
-    public void setLikesCount(String likesCount) { this.likesCount = likesCount; }
+    public int getLikesCount() { return likesCount; }
+    public void setLikesCount(int likesCount) { this.likesCount = likesCount; }
 
     @DynamoDBAttribute(attributeName = "rating")
-    public String getRating() { return rating; }
-    public void setRating(String rating) { this.rating = rating; }
+    public int getRating() { return rating; }
+    public void setRating(int rating) { this.rating = rating; }
 
     @DynamoDBAttribute(attributeName = "reportspam")
     public boolean isReportSpam() { return reportSpam; }
