@@ -1,9 +1,6 @@
 package com.nus.edtech.blogs.controllers;
 
-import com.nus.edtech.blogs.common.utils.BlogsValidator;
 import com.nus.edtech.blogs.dao.BlogsEntity;
-import com.nus.edtech.blogs.dao.ComplexBlogs;
-import com.nus.edtech.blogs.models.Blogs;
 import com.nus.edtech.blogs.services.BlogsService;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,20 +17,16 @@ public class BlogsController {
     private BlogsService blogsService;
 
     @Autowired
-    private BlogsValidator blogsValidator;
-
-    @Autowired
     private MapperFacade mapperFacade;
 
     @PostMapping("author/{author}")
-    public boolean postBlogByAuthor(@PathVariable (value = "author") String author, @RequestBody Blogs requestBlog) throws Exception {
-        if(requestBlog == null || author == null) {
+    public boolean postBlogByAuthor(@PathVariable (value = "author") String author, @RequestBody BlogsEntity requestBlogsEntity) throws Exception {
+        if(requestBlogsEntity == null || author == null) {
             throw new Exception("Input blog or author is null");
         }
         try{
-            requestBlog.setAuthor(author);
-            blogsValidator.validateInputBlogs(requestBlog);
-            BlogsEntity requestBlogsEntity = mapperFacade.map(requestBlog, BlogsEntity.class);
+            requestBlogsEntity.setBlogAuthor(author);
+           // BlogsEntity requestBlogsEntity = mapperFacade.map(requestBlog, BlogsEntity.class);
             blogsService.postBlogByAuthor(requestBlogsEntity);
             return true;
 
@@ -43,7 +36,7 @@ public class BlogsController {
     }
 
     @GetMapping("author/{author}")
-    public List<String> getBlogIdByAuthor(@PathVariable(value = "author") String author) {
+    public List<String> getBlogIdsByAuthor(@PathVariable(value = "author") String author) {
         return blogsService.findBlogsByAuthor(author);
     }
 
@@ -61,6 +54,7 @@ public class BlogsController {
         return blogsService.getBlogById(id);
     }
 
+    //modify
     @PutMapping("blog/{id}")
     public boolean updateBlogById(@PathVariable(value = "id") String id, @RequestBody BlogsEntity requestBlogsEntity) throws Exception {
         try {
@@ -69,6 +63,19 @@ public class BlogsController {
             requestBlogsEntity.setId(id);
             blogsService.updateBlog(requestBlogsEntity);
             return true;
+        }catch (Exception ex){
+            throw ex;
+        }
+    }
+
+    @PutMapping("blog/{blogid}/comment")
+    public boolean addCommentToBlog(@PathVariable(value = "blogid") String blogId, @RequestBody BlogsEntity.Comments comment)
+            throws Exception {
+        try{
+                if(blogId == null || comment == null)
+                    throw new Exception("Empty blogId or comment sent for addCommentToBlog");
+                blogsService.addCommentToBlog(blogId,comment);
+                return true;
         }catch (Exception ex){
             throw ex;
         }
@@ -86,30 +93,6 @@ public class BlogsController {
         }
     }
 
-    @GetMapping("complex/{author}/{blogId}")
-    public List<ComplexBlogs> getComplexBlogByAuthorAndId(@PathVariable(value = "author") String author, @PathVariable(value = "blogId") String blogId) {
-        return blogsService.findComplexBlogsByAuthorAndId(author, blogId);
-    }
-
-    @GetMapping("complex/author/{author}")
-    public List<ComplexBlogs> getComplexBlogByAuthor(@PathVariable(value = "author") String author) {
-        return blogsService.findComplexBlogsByAuthor(author);
-    }
-
-    @PostMapping("complex/{author}")
-    public boolean postComplexBlogByAuthor(@PathVariable (value = "author") String author, @RequestBody ComplexBlogs requestBlog) throws Exception {
-        if(requestBlog == null || author == null) {
-            throw new Exception("Input blog or author is null");
-        }
-        try{
-            requestBlog.setAuthor(author);
-            blogsService.postComplexBlogByAuthor(requestBlog);
-            return true;
-
-        }catch (Exception ex){
-            throw ex;
-        }
-    }
 
     //query index
     @GetMapping("index/author/{author}")

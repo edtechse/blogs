@@ -1,5 +1,6 @@
 package com.nus.edtech.blogs.services;
 
+import com.nus.edtech.blogs.common.utils.BlogsValidator;
 import com.nus.edtech.blogs.dao.BlogsEntity;
 import com.nus.edtech.blogs.dao.ComplexBlogs;
 import com.nus.edtech.blogs.repositories.BlogsRepository;
@@ -15,7 +16,11 @@ public class BlogsService {
     @Autowired
     private BlogsRepository blogsRepository;
 
+    @Autowired
+    private BlogsValidator blogsValidator;
+
     public void postBlogByAuthor(BlogsEntity blogsEntity){
+        blogsValidator.validateInputBlogs(blogsEntity);
          blogsRepository.saveBlog(blogsEntity);
     }
 
@@ -34,12 +39,7 @@ public class BlogsService {
 
     public void updateBlog(BlogsEntity requestBlogsEntity) {
         BlogsEntity originalBlogEntity = blogsRepository.findBlogById(requestBlogsEntity.getId());
-        if (requestBlogsEntity.getBlogTitle() != null)
-            originalBlogEntity.setBlogTitle(requestBlogsEntity.getBlogTitle());
-        if(requestBlogsEntity.getBlogText() != null)
-            originalBlogEntity.setBlogText(requestBlogsEntity.getBlogText());
-        if(requestBlogsEntity.getBlogTag() != null)
-            originalBlogEntity.setBlogTag(requestBlogsEntity.getBlogTag());
+        originalBlogEntity = blogsValidator.updateBlogsEntity(requestBlogsEntity,originalBlogEntity);
         blogsRepository.saveBlog(originalBlogEntity);
     }
 
@@ -70,5 +70,11 @@ public class BlogsService {
 
     public void queryIndex(String author) {
          blogsRepository.queryIndex(author);
+    }
+
+    public void addCommentToBlog(String blogId, BlogsEntity.Comments comments) {
+        BlogsEntity originalBlogEntity = blogsRepository.findBlogById(blogId);
+        originalBlogEntity = blogsValidator.addCommentToBlog(comments,originalBlogEntity);
+        blogsRepository.saveBlog(originalBlogEntity);
     }
 }

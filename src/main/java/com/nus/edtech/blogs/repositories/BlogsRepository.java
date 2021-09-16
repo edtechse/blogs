@@ -46,7 +46,7 @@ public class BlogsRepository  {
         return queryResult;
 **/
         DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
-                .withFilterExpression("author = :val").withExpressionAttributeValues(eav);
+                .withFilterExpression("blogauthor = :val").withExpressionAttributeValues(eav);
 
         List<BlogsEntity> scanResult = dynamoDBMapper.scan(BlogsEntity.class, scanExpression);
 
