@@ -23,11 +23,10 @@ public class BlogsRepository  {
 
     public List<BlogsEntity> findBlogsByAuthor(String author) {
         Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+
         eav.put(":val", new AttributeValue().withS(author));
-
         DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
-                .withFilterExpression("author = :val").withExpressionAttributeValues(eav);
-
+                .withFilterExpression("blogauthor = :val").withExpressionAttributeValues(eav);
         List<BlogsEntity> scanResult = dynamoDBMapper.scan(BlogsEntity.class, scanExpression);
 
         return scanResult;
