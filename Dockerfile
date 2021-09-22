@@ -1,4 +1,4 @@
 FROM openjdk:11
-RUN groupadd -S spring && useradd -S spring -G spring
+RUN groupadd -r spring && useradd -r -gspring spring
 USER spring:spring
 ENTRYPOINT ["java","-cp","app:app/lib/*","blogs.BlogsApplication"]
