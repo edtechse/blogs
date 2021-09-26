@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 public class Blogs {
-        private String id;
+        private String blogId;
         private String blogAuthor;
         private String blogTitle;
         private String blogCreationDate;
@@ -18,8 +18,8 @@ public class Blogs {
         private Set<String> reportSpamInteractionIds;
         private Set<String> ratingInteractionIds;
 
-        public String getId() { return id;}
-        public void setId(String id) {this.id = id;}
+        public String getBlogId() { return blogId;}
+        public void setBlogId(String blogId) {this.blogId = blogId;}
 
         public String getBlogAuthor() { return blogAuthor;}
         public void setBlogAuthor(String blogAuthor) {this.blogAuthor = blogAuthor;}
@@ -60,7 +60,7 @@ public class Blogs {
 
         @Override
         public String toString() {
-            return "Blog [id=" + id + ", blogTitle=" + blogTitle + ", createDate=" + blogCreationDate
+            return "Blog [id=" + blogId + ", blogTitle=" + blogTitle + ", createDate=" + blogCreationDate
                     + ", blogText=" + blogText + ", author=" + blogAuthor + ", blogTags=" + blogTags + "]";
         }
 }

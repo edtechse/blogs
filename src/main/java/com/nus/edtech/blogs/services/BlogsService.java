@@ -30,17 +30,17 @@ public class BlogsService {
         List<BlogsEntity> items = blogsRepository.findBlogsByAuthor(author);
         List<String> idList = new ArrayList<>();
         for(BlogsEntity item: items) {
-            idList.add(item.getId());
+            idList.add(item.getBlogId());
         }
         return idList;
     }
 
-    public BlogsEntity getBlogById(String id) {
-        return blogsRepository.findBlogById(id);
+    public BlogsEntity getBlogById(String blogId) {
+        return blogsRepository.findBlogById(blogId);
     }
 
     public void updateBlog(BlogsEntity requestBlogsEntity) {
-        BlogsEntity originalBlogEntity = blogsRepository.findBlogById(requestBlogsEntity.getId());
+        BlogsEntity originalBlogEntity = blogsRepository.findBlogById(requestBlogsEntity.getBlogId());
         originalBlogEntity = blogsValidator.updateBlogsEntity(requestBlogsEntity,originalBlogEntity);
         blogsRepository.saveBlog(originalBlogEntity);
     }

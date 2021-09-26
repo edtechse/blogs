@@ -17,8 +17,8 @@ public class BlogsRepository  {
     @Autowired
     private DynamoDBMapper dynamoDBMapper;
 
-    public BlogsEntity findBlogById(String id) {
-        return dynamoDBMapper.load(BlogsEntity.class, id);
+    public BlogsEntity findBlogById(String blogId) {
+        return dynamoDBMapper.load(BlogsEntity.class, blogId);
     }
 
     public List<BlogsEntity> findBlogsByAuthor(String author) {

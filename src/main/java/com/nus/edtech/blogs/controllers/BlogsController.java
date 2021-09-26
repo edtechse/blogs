@@ -56,11 +56,11 @@ public class BlogsController {
         return true;
     }
 
-    @GetMapping("/blog/{id}")
-    public BlogsEntity getBlogById(@PathVariable(value = "id") String id) throws Exception {
-        if (id == null)
+    @GetMapping("/blog/{blogid}")
+    public BlogsEntity getBlogById(@PathVariable(value = "blogid") String blogId) throws Exception {
+        if (blogId == null)
             throw new Exception("Input blogId is null");
-        return blogsService.getBlogById(id);
+        return blogsService.getBlogById(blogId);
     }
 
     @PutMapping("blog/{id}")
@@ -68,7 +68,7 @@ public class BlogsController {
         try {
             if (id == null)
                 throw new Exception("Empty id sent for updateBlog");
-            requestBlog.setId(id);
+            requestBlog.setBlogId(id);
             BlogsEntity requestBlogsEntity = mapperFacade.map(requestBlog, BlogsEntity.class);
             blogsService.updateBlog(requestBlogsEntity);
             return true;
