@@ -42,7 +42,8 @@ public class AWSConfig {
     public static AWSCredentials amazonAWSCredentials() throws Exception {
         String msg = "Cannot load AWS credentials, no 'default' profile available.";
         try {
-            return new EnvironmentVariableCredentialsProvider().getCredentials();
+            //return new EnvironmentVariableCredentialsProvider().getCredentials();
+            return  new DefaultAWSCredentialsProviderChain().getCredentials();
         } catch (Exception e) {
             throw new AmazonClientException(msg, e);
         }
