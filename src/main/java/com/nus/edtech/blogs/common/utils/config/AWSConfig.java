@@ -1,9 +1,8 @@
 package com.nus.edtech.blogs.common.utils.config;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.auth.*;
+import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
@@ -16,19 +15,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AWSConfig {
 
-    @Value("${amazon.access.key}")
-    private String amazonAWSAccessKey;
-
-    @Value("${amazon.access.secret-key}")
-    private String amazonAWSSecretKey;
-
     @Value("${amazon.region}")
     private String awsRegion;
 
     @Value("${amazon.end-point.url}")
     private String awsDynamoDBEndPoint;
 
-    public AWSCredentialsProvider amazonAWSCredentialsProvider() {
+    public AWSCredentialsProvider amazonAWSCredentialsProvider() throws Exception {
         return new AWSStaticCredentialsProvider(amazonAWSCredentials());
     }
 
@@ -38,7 +31,7 @@ public class AWSConfig {
     }
 
     @Bean
-    public AmazonDynamoDB amazonDynamoDB() {
+    public AmazonDynamoDB amazonDynamoDB() throws Exception {
         return AmazonDynamoDBClientBuilder.standard()
                 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(awsDynamoDBEndPoint, awsRegion))
                 .withCredentials(amazonAWSCredentialsProvider())
@@ -46,8 +39,13 @@ public class AWSConfig {
     }
 
     @Bean
-    public AWSCredentials amazonAWSCredentials() {
-        return new BasicAWSCredentials(amazonAWSAccessKey, amazonAWSSecretKey);
+    public static AWSCredentials amazonAWSCredentials() throws Exception {
+        String msg = "Cannot load AWS credentials, no 'default' profile available.";
+        try {
+            return new EnvironmentVariableCredentialsProvider().getCredentials();
+        } catch (Exception e) {
+            throw new AmazonClientException(msg, e);
+        }
     }
 }
 
