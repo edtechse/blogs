@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/blogs/")
@@ -106,6 +107,8 @@ public class BlogsController {
         try {
             if (blogId == null || comments == null)
                 throw new Exception("Empty blogId or comment sent for addCommentToBlog");
+            String commentId = UUID.randomUUID().toString().replaceAll("-","");
+            comments.setCommentId(commentId);
             BlogsEntity.Comments commentsEntity = mapperFacade.map(comments, BlogsEntity.Comments.class);
             blogsService.addCommentToBlog(blogId, commentsEntity);
             return true;
