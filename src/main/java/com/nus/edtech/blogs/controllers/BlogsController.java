@@ -22,6 +22,17 @@ public class BlogsController {
     @Autowired
     private MapperFacade mapperFacade;
 
+    @GetMapping("all")
+    public List<Blogs> getAllBlogs(){
+        try {
+            List<BlogsEntity> responseBlogList = blogsService.getAllBlogs();
+            return mapperFacade.mapAsList(responseBlogList,Blogs.class);
+        } catch (Exception ex) {
+            throw ex;
+        }
+
+    }
+
     @PostMapping("author/{author}")
     public boolean postBlogByAuthor(@PathVariable(value = "author") String author, @RequestBody Blogs requestBlog) throws Exception {
         if (requestBlog == null || author == null)

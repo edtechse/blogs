@@ -2,6 +2,7 @@ package com.nus.edtech.blogs.services;
 
 import com.nus.edtech.blogs.common.utils.BlogsValidator;
 import com.nus.edtech.blogs.dao.BlogsEntity;
+import com.nus.edtech.blogs.models.Blogs;
 import com.nus.edtech.blogs.models.Interaction;
 import com.nus.edtech.blogs.repositories.BlogsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,5 +108,9 @@ public class BlogsService {
             default: break;
         }
         blogsRepository.saveBlog(originalBlogEntity);
+    }
+
+    public List<BlogsEntity> getAllBlogs() {
+        return blogsRepository.findAllBlogs();
     }
 }

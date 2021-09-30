@@ -4,6 +4,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.nus.edtech.blogs.dao.BlogsEntity;
+import com.nus.edtech.blogs.models.Blogs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -38,5 +39,11 @@ public class BlogsRepository  {
 
     public void deleteBlog(BlogsEntity blogsEntity) {
         dynamoDBMapper.delete(blogsEntity);
+    }
+
+    public List<BlogsEntity> findAllBlogs() {
+        DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
+        List<BlogsEntity> scanResult = dynamoDBMapper.scan(BlogsEntity.class,scanExpression);
+        return scanResult;
     }
 }
