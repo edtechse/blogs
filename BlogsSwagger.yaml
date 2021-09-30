@@ -1,0 +1,479 @@
+swagger: "2.0"
+info:
+  description: "This is a sample server Edtech Service server.  You can find out more about     Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).      For this sample, you can use the api key `special-key` to test the authorization     filters."
+  version: "1.0.0"
+  title: "Edtech Platform"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "apiteam@swagger.io"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "dynamodb.ap-southeast-1.amazonaws.com"
+basePath: "/"
+tags:
+  - name: "Edtech Blogs Service"
+    description: "Edtech Blogs Service"
+    externalDocs:
+      description: "Find out more"
+      url: "http://swagger.io"
+  - name: "Edtech Comments"
+    description: "Edtech Comments Service"
+    externalDocs:
+      description: "Find out more"
+      url: "http://swagger.io"
+schemes:
+  - "https"
+  - "http"
+paths:
+  /v1/blogs/all:
+    get:
+      tags:
+        - "Edtech Blogs Service"
+      summary: "Find all blogs"
+      description: ""
+      operationId: "findAllBlogs"
+      produces:
+        - "application/xml"
+        - "application/json"
+      responses:
+        "200":
+          description: "get blogs successfully"
+          schema:
+            $ref: "#/definitions/BlogsDetailSaved"
+        "400":
+          description: "Invalid blog details supplied"
+        "404":
+          description: "Table not found"
+      security:
+        - edtech_auth:
+            - "read:blogs"
+
+  /v1/blogs/author/{author}:
+    post:
+      tags:
+        - "Edtech Blogs Service"
+      summary: "Create a blog in edtech platform"
+      description: ""
+      operationId: "addBlog"
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "author"
+          description: "unique author for each user to create or modify an question"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "Question object that needs to be added to the service system"
+          required: true
+          schema:
+            $ref: "#/definitions/BlogDetail"
+      responses:
+        "204":
+          description: "Question successful created"
+        "400":
+          description: "Invalid user account supplied"
+        "404":
+          description: "User not found"
+        "405":
+          description: "Validation exception"
+      security:
+        - edtech_auth:
+            - "write:blogs"
+            - "read:blogs"
+    put:
+      tags:
+        - "Edtech Blogs Service"
+      summary: "Update an existing blog"
+      description: ""
+      operationId: "updateBlog"
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "author"
+          description: "unique author for each user to create or modify an question"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "Question object that needs to be added to the service system"
+          required: true
+          schema:
+            $ref: "#/definitions/BlogUpdateDetail"
+      responses:
+        "204":
+          description: "Question successful modified"
+        "400":
+          description: "Invalid user account supplied"
+        "404":
+          description: "User not found"
+        "405":
+          description: "Validation exception"
+      security:
+        - edtech_auth:
+            - "write:blogs"
+            - "read:blogs"
+
+    get:
+      tags:
+        - "Edtech Blogs Service"
+      summary: "Find blog by user account"
+      description: ""
+      operationId: "findBlogByUseraccount"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "author"
+          description: "unique author for each user to create or modify an question"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "get blogs successfully"
+          schema:
+            $ref: "#/definitions/BlogIdSaved"
+        "400":
+          description: "Invalid user account supplied"
+        "404":
+          description: "User not found"
+      security:
+        - edtech_auth:
+            - "read:blogs"
+
+    delete:
+      tags:
+        - "Edtech Blogs Service"
+      summary: "Delete all blogs by user account"
+      description: ""
+      operationId: "deleteBlogsByUserAccount"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "author"
+          description: "unique all blogs under an author"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "delete all blogs for specific user successfully"
+        "400":
+          description: "Invalid user account supplied"
+        "404":
+          description: "User not found"
+      security:
+        - edtech_auth:
+            - "write:blogs"
+
+  /v1/blogs//blog/{blogid}:
+    get:
+      tags:
+        - "Edtech Blogs Service"
+      summary: "Finds blog by blog id"
+      description: ""
+      operationId: "findBlogByBlogId"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "blogid"
+          description: "unique blog id to a blog"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "get blog by blog id successfully"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/BlogsDetailSaved"
+        "400":
+          description: "Invalid user account supplied"
+        "404":
+          description: "User not found"
+      security:
+        - edtech_auth:
+            - "read:blogs"
+
+    delete:
+      tags:
+        - "Edtech Blogs Service"
+      summary: "Delete blog by blog id"
+      description: ""
+      operationId: "deleteBlogByBlogid"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "blogid"
+          description: "unique blog id to delete an blog"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "delete specific blog successfully"
+        "400":
+          description: "Invalid blog id supplied"
+        "404":
+          description: "Blog id not found"
+      security:
+        - edtech_auth:
+            - "write:blogs"
+
+  /v1/blogs/blog/{blogid}/comment:
+    put:
+      tags:
+        - "Edtech Comments"
+      summary: "Add a new comment to a blog"
+      description: ""
+      operationId: "addCommentToBlog"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "blogid"
+          description: "blogid to add a comment"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "added comment for specific blog successfully"
+        "400":
+          description: "Invalid user account supplied"
+        "404":
+          description: "User not found"
+      security:
+        - edtech_auth:
+            - "write:comments"
+
+    delete:
+      tags:
+        - "Edtech Comments"
+      summary: "Delete all comments by author name"
+      description: ""
+      operationId: "deleteCommentsByUserAccount"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "blogid"
+          description: "author for each user to delete a comment"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "delete all comments for specific blog successfully"
+        "400":
+          description: "Invalid blog id supplied"
+        "404":
+          description: "User not found"
+      security:
+        - edtech_auth:
+            - "write:comments"
+
+  /v1/blogs/blog/{blogid}/interaction:
+    put:
+      tags:
+        - "Edtech Blog Interactions"
+      summary: "Update interaction to a blog"
+      description: ""
+      operationId: "updateInteractionToBlog"
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "blogid"
+          description: "blogid to update na interaction"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "Update interaction to a blog"
+          required: true
+          schema:
+            $ref: "#/definitions/CommentDetail"
+      responses:
+        "204":
+          description: "Interaction successful created"
+        "400":
+          description: "Invalid author supplied"
+        "404":
+          description: "User not found"
+        "405":
+          description: "Validation exception"
+      security:
+        - edtech_auth:
+            - "write:blogs"
+            - "read:blogs"
+
+   
+securityDefinitions:
+  edtech_auth:
+    type: "oauth2"
+    authorizationUrl: "http://edtech.swagger.io/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:blogs: "modify blogs in your account"
+      read:blogs: "query your blogs"
+      write:comments: "modify comments in your account"
+      read:comments: "query your comments"
+definitions:
+  BlogDetail:
+    type: "object"
+    required:
+      - "blogTitle"
+      - "blogCreationDate"
+      - "blogText"
+      - "blogTags"
+    properties:
+      blogTitle:
+        type: "string"
+        example: "React tutorial"
+      blogCreationDate:
+        type: "string"
+        format: "date-time"
+      blogText:
+        type: "string"
+        example: "React tutorial for beginners"
+      blogTags:
+        type: "array"
+        items:
+          type: "string"
+          example: "js"
+      comments:
+        type: "array"
+        items:
+          $ref: "#/definitions/CommentDetailSaved"
+    xml:
+      name: "BlogDetail"
+  BlogIdSaved:
+    type: "array"
+    items:
+      type: "string"
+      example: "AXSC10321SXAScma"
+  BlogsDetailSaved:
+    type: "object"
+    required:
+      - "blogTitle"
+      - "blogId"
+      - "blogCreationDate"
+      - "blogText"
+      - "blogTags"
+      - "author"
+      - "comments"
+    properties:
+      blogTitle:
+        type: "string"
+        example: "React introduction"
+      blogId:
+        type: "string"
+        example: "AXSC10321SXAScma"
+      blogCreationDate:
+        type: "string"
+        format: "date-time"
+      blogText:
+        type: "string"
+        example: "Learn React for beginners"
+      blogTags:
+        type: "array"
+        items:
+          type: "string"
+          example: "js"
+      author:
+        type: "string"
+        description: "author account"
+        example: "Peter Pucker"
+      comments:
+        type: "array"
+        items:
+          $ref: "#/definitions/CommentDetailSaved"
+    xml:
+      name: "BlogDetail"
+  BlogUpdateDetail:
+    type: "object"
+    required:
+      - "updateDate"
+    properties:
+      blogId:
+        type: "string"
+        example: "AXSC10321SXAScma"
+      blogText:
+        type: "string"
+        example: "Failed to establish a connection in pgAdmin"
+      blogTags:
+        type: "array"
+        items:
+          type: "string"
+          example: "pgAdmin"
+    xml:
+      name: "QuestionUpdateDetail"
+  CommentDetail:
+    type: "object"
+    required:
+      - "commentId"
+      - "commentAuthor"
+      - "commentCreationDate"
+      - "commentText"
+    properties:
+      commentId:
+        type: "string"
+        example: "AXSC10321SXAScma"
+      commentAuthor:
+        type: "string"
+        example: "Peter123"
+      commentCreationDate:
+        type: "string"
+        format: "date-time"
+      commentText:
+        type: "string"
+        example: "Failed to establish a connection in pgAdmin"
+    xml:
+      name: "CommentDetail"
+  CommentIdSaved:
+    type: "array"
+    items:
+      type: "string"
+      example: "AXSC10321SXAScma"
+  CommentDetailSaved:
+    type: "object"
+    required:
+      - "commentText"
+      - "commentAuthor"
+      - "commentCreationDate"
+    properties:
+      commentText:
+        type: "string"
+        example: "Good article"
+      commentAuthor:
+        type: "string"
+        example: "PeterParker"
+      commentCreationDate:
+        type: "string"
+        format: "date-time"
+    xml:
+      name: "BlogDetail"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
