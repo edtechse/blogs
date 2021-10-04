@@ -7,8 +7,10 @@ import com.nus.edtech.blogs.models.Interaction;
 import com.nus.edtech.blogs.services.BlogsService;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.beans.factory.annotation.Autowired;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.client.RestTemplate;
+//import com.edtech.qaservice.model.*;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,11 +19,33 @@ import java.util.UUID;
 
 public class BlogsController {
 
+    private static final String QNA_SERVICE = "qnaService";
+
     @Autowired
     private BlogsService blogsService;
 
     @Autowired
     private MapperFacade mapperFacade;
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @GetMapping("questions/all")
+    @CircuitBreaker(name=QNA_SERVICE, fallbackMethod= "qnaFallback")
+    public String getMyOrder(){
+        try {
+            return restTemplate.getForObject
+                    ("http://localhost:9003/v1/order",
+                            String.class);
+
+        } catch (Exception ex) {
+            throw ex;
+        }
+    }
+
+    public String qnaFallback(Exception e){
+        return "test error";
+    }
 
     @GetMapping("all")
     public List<Blogs> getAllBlogs(){
@@ -33,7 +57,6 @@ public class BlogsController {
         }
 
     }
-
     @PostMapping("author/{author}")
     public boolean postBlogByAuthor(@PathVariable(value = "author") String author, @RequestBody Blogs requestBlog) throws Exception {
         if (requestBlog == null || author == null)
