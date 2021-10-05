@@ -8,7 +8,6 @@ import com.nus.edtech.blogs.services.BlogsService;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -131,13 +130,13 @@ public class BlogsController {
     }
 
     @PutMapping("blog/{blogid}/interaction")
-    public boolean updateInteractionToBlog(@PathVariable(value = "blogid") String blogId,
+    public String updateInteractionToBlog(@PathVariable(value = "blogid") String blogId,
                                            @RequestBody Interaction interaction) throws Exception {
         try {
             if(blogId == null || interaction == null)
                 throw new Exception("Input blogId or interaction is null for updateInteractionToBlog");
             blogsService.updateInteractionToBlog(blogId,interaction);
-            return true;
+            return "User interaction is added to the blog";
         }catch (Exception ex){
             throw ex;
         }
