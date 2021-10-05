@@ -12,7 +12,7 @@
 	<artifactId>blogs</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>blogs</name>
-	<description>Blogs service for EduTech project </description>
+	<description>Blogs service for EdTech project </description>
 	<properties>
 		<java.version>11</java.version>
 		  <sonar.organization>edtechproject</sonar.organization>
@@ -57,16 +57,6 @@
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk-dynamodb</artifactId>
 			<version>1.11.408</version>
-		</dependency>
-		<dependency>
-			<groupId>io.github.resilience4j</groupId>
-			<artifactId>resilience4j-spring-boot2</artifactId>
-			<version>1.7.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-aop</artifactId>
-			<version>2.2.6.RELEASE</version>
 		</dependency>
 	</dependencies>
 
