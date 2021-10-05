@@ -22,7 +22,6 @@ pipeline {
                 checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: 'https://github.com/edtechse/blogs.git']]])    
             }
         }
- 
     // Building Docker images
     stage('Building image') {
       steps{
@@ -41,5 +40,10 @@ pipeline {
          }
         }
       }
+    }
+    post {
+        failure {
+            emailext body: '\'Build failed in Jenkins: $PROJECT_NAME - #$BUILD_NUMBER\'', replyTo: 'no-reply@gmail.com', subject: '\'$PROJECT_NAME - Build # $BUILD_NUMBER - ERROR!\'', to: 'edtechse@gmail.com'
+        }
     }
 }
