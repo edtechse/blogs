@@ -36,10 +36,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-amqp</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
@@ -53,11 +49,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.amqp</groupId>
-			<artifactId>spring-rabbit-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>ma.glasnost.orika</groupId>
 			<artifactId>orika-core</artifactId>
 			<version>1.5.4</version>
@@ -67,11 +58,6 @@
 			<artifactId>aws-java-sdk-dynamodb</artifactId>
 			<version>1.11.408</version>
 		</dependency>
-		<!--<dependency>
-			<groupId>com.amazonaws</groupId>
-			<artifactId>amazon-dax-client</artifactId>
-			<version>1.0.230341.0</version>
-		</dependency>-->
 	</dependencies>
 
 	<build>
