@@ -7,7 +7,10 @@ import com.nus.edtech.blogs.models.Interaction;
 import com.nus.edtech.blogs.services.BlogsService;
 import ma.glasnost.orika.MapperFacade;
 import org.springframework.beans.factory.annotation.Autowired;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -16,11 +19,17 @@ import java.util.UUID;
 
 public class BlogsController {
 
+    private static final String INTERACTIONS_SERVICE = "interactionsService";
+    private static final String INTERACTIONS_SERVICE_URL = "http://localhost:9003/v1/interactions/blog/";
+
     @Autowired
     private BlogsService blogsService;
 
     @Autowired
     private MapperFacade mapperFacade;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     @GetMapping("all")
     public List<Blogs> getAllBlogs(){
@@ -89,15 +98,21 @@ public class BlogsController {
     }
 
     @DeleteMapping("blog/{id}")
-    public boolean deleteBlogById(@PathVariable(value = "id") String id) throws Exception {
+    @CircuitBreaker(name= INTERACTIONS_SERVICE, fallbackMethod= "interactionFallback")
+    public String deleteBlogById(@PathVariable(value = "id") String id) throws Exception {
         try {
             if (id == null)
                 throw new Exception("Empty id sent for delete");
             blogsService.deleteBlogById(id);
-            return true;
+            restTemplate.delete(INTERACTIONS_SERVICE_URL+id, String.class);
+            return "The blog and its interactions are deleted";
         } catch (Exception ex) {
             throw new Exception("deleteBlogById:: Failed to delete blog due to " + ex.getMessage());
         }
+    }
+
+    public String interactionFallback(Exception e){
+        return "The blog is deleted, interaction service is down";
     }
 
     @PutMapping("blog/{blogid}/comment")

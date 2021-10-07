@@ -4,3 +4,44 @@ amazon:
     url: dynamodb.ap-southeast-1.amazonaws.com
 server:
   port: 9001
+
+cloud:
+  aws:
+    credentials:
+      profile-name: default
+    region:
+      auto: false
+      static: ap-southeast-1
+logging:
+  level:
+    io:
+      micrometer: DEBUG
+resilience4j:
+  circuitbreaker:
+    instances:
+      interactionsService:
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        waitDurationInOpenState: 5s
+        slidingWindowType: COUNT_BASED
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    export:
+      cloudwatch:
+        namespace: blogsApp
+        batchSize: 10
