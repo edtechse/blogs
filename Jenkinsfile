@@ -30,7 +30,17 @@ pipeline {
         }
       }
     }
-  
+  stage('Test') {
+              steps {
+                  sh "mvn clean test"
+              }
+
+              post {
+                  always {
+                      junit '**/target/surefire-reports/TEST-*.xml'
+                  }
+              }
+     }
     // Uploading Docker images into AWS ECR
     stage('Pushing to ECR') {
      steps{
