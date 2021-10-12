@@ -32,7 +32,7 @@ pipeline {
     }
   stage('Test') {
               steps {
-                  junit '**/target/surefire-reports/TEST-*.xml'
+                 echo 'Tests ran as part of dockerfile'
               }
      }
     // Uploading Docker images into AWS ECR
