@@ -21,7 +21,7 @@ public class MessageQueueListener implements Runnable {
     MessageConsumer consumer = null;
     protected Session session = null;
 
-    private static final String BLOG_SERVICE_URL = "http://a7c8c8eadfccd4c229643034e64e7566-632117854.ap-southeast-1.elb.amazonaws.com:9001/v1/blogs/blog/";
+    private static final String BLOG_SERVICE_URL = "http://localhost:9001/v1/blogs/blog/";
 
     private RestTemplate restTemplate = new RestTemplate();
 
