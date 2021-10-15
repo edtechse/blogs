@@ -1,5 +1,6 @@
 package com.nus.edtech.blogs.common.utils.config;
 
+import com.amazon.dax.client.dynamodbv2.AmazonDaxClientBuilder;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.auth.*;
 import com.amazonaws.client.builder.AwsClientBuilder;
@@ -13,7 +14,7 @@ import io.micrometer.cloudwatch2.CloudWatchConfig;
 import io.micrometer.cloudwatch2.CloudWatchMeterRegistry;
 import io.micrometer.core.instrument.Clock;
 import io.micrometer.core.instrument.MeterRegistry;
-import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.cloudwatch.CloudWatchAsyncClient;
 
@@ -22,6 +23,7 @@ import java.util.Map;
 
 @Configuration
 public class AWSConfig {
+    private String DAX_ENDPOINT = "mydaxcluster.mxyuv9.dax-clusters.ap-southeast-1.amazonaws.com:8111";
 
     @Value("${amazon.region}")
     private String awsRegion;
@@ -39,11 +41,24 @@ public class AWSConfig {
     }
 
     @Bean
+    public DynamoDBMapper daxMapper(AmazonDynamoDB amazonDAX) {
+        return new DynamoDBMapper(amazonDAX);
+    }
+
+    @Bean
     public AmazonDynamoDB amazonDynamoDB() throws Exception {
         return AmazonDynamoDBClientBuilder.standard()
                 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(awsDynamoDBEndPoint, awsRegion))
                 .withCredentials(amazonAWSCredentialsProvider())
                 .build();
+    }
+
+    @Bean
+    public AmazonDynamoDB amazonDAX() {
+        AmazonDaxClientBuilder daxClientBuilder = AmazonDaxClientBuilder.standard();
+        daxClientBuilder.withRegion(awsRegion).withEndpointConfiguration(DAX_ENDPOINT);
+
+        return daxClientBuilder.build();
     }
 
     @Bean
@@ -59,7 +74,7 @@ public class AWSConfig {
     @Bean
     public CloudWatchAsyncClient cloudWatchAsyncClient() {
         return CloudWatchAsyncClient.builder().region(Region.AP_SOUTHEAST_1)
-                .credentialsProvider(ProfileCredentialsProvider.create("default")).build();
+                .credentialsProvider(DefaultCredentialsProvider.create()).build();
     }
 
     @Bean
