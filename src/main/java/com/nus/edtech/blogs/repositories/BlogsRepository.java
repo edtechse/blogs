@@ -18,8 +18,11 @@ public class BlogsRepository  {
     @Autowired
     private DynamoDBMapper dynamoDBMapper;
 
+    @Autowired
+    private DynamoDBMapper daxMapper;
+
     public BlogsEntity findBlogById(String blogId) {
-        return dynamoDBMapper.load(BlogsEntity.class, blogId);
+        return daxMapper.load(BlogsEntity.class, blogId);
     }
 
     public List<BlogsEntity> findBlogsByAuthor(String author) {
@@ -28,7 +31,7 @@ public class BlogsRepository  {
         eav.put(":val", new AttributeValue().withS(author));
         DynamoDBScanExpression scanExpression = new DynamoDBScanExpression()
                 .withFilterExpression("blogauthor = :val").withExpressionAttributeValues(eav);
-        List<BlogsEntity> scanResult = dynamoDBMapper.scan(BlogsEntity.class, scanExpression);
+        List<BlogsEntity> scanResult = daxMapper.scan(BlogsEntity.class, scanExpression);
 
         return scanResult;
     }
@@ -43,7 +46,7 @@ public class BlogsRepository  {
 
     public List<BlogsEntity> findAllBlogs() {
         DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
-        List<BlogsEntity> scanResult = dynamoDBMapper.scan(BlogsEntity.class,scanExpression);
+        List<BlogsEntity> scanResult = daxMapper.scan(BlogsEntity.class,scanExpression);
         return scanResult;
     }
 }

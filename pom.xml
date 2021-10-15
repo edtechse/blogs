@@ -73,7 +73,7 @@
 		<dependency>
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk-dynamodb</artifactId>
-			<version>1.11.408</version>
+			<version>1.12.22</version>
 		</dependency>
 		<dependency>
 			<groupId>io.github.resilience4j</groupId>
@@ -106,6 +106,26 @@
 			<artifactId>amazon-sqs-java-messaging-lib</artifactId>
 			<version>1.0.4</version>
 			<type>jar</type>
+		</dependency>
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>amazon-dax-client</artifactId>
+			<version>1.0.230341.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.amazonaws</groupId>
+					<artifactId>aws-java-sdk-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.amazonaws</groupId>
+					<artifactId>aws-java-sdk-dynamodb</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-core</artifactId>
+			<version>1.12.22</version>
 		</dependency>
 	</dependencies>
 	<reporting>
